@@ -181,5 +181,5 @@ for c in category_id_list:
                     package_dict['column_count'] = 'MISSING'
             #output the result
             scraperwiki.sqlite.save(unique_keys=['url'],data=package_dict)
-            print('****************end---'+package_dict['name']+'---end****************')
+            print '****************end------end****************'
 
