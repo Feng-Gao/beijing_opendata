@@ -77,13 +77,12 @@ for c in category_id_list:
         page_length = 1
     #iterate each pages
     for i in range(1,int(page_length)+1):
-        page_url =  url + '&currPage='+str(i)
+        page_url =  url +'&currPage='+str(i)
         print page_url
         result = requests.get(page_url,headers=headers)
         soup = BeautifulSoup(result.content,features='html.parser')
         #on each page, fetch all package blocks
-        package_block_div = soup.find(id="time")
-        package_blocks = package_block_div.find_all("div")
+        package_blocks = soup.find_all(attrs={"class":"ztmain"})
         print len(package_blocks)
         #iterate each blocks
         for p in package_blocks:
