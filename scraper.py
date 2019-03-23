@@ -83,6 +83,7 @@ for c in category_id_list:
         soup = BeautifulSoup(result.content,features='lxml')
         #on each page, fetch all package blocks
         package_blocks = soup.find_all(attrs={"class":"ztrit_box fn-clear"})
+        print len(package_blocks)
         #iterate each blocks
         for p in package_blocks:
             package_dict = {'url':'',
