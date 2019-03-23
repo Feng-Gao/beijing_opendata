@@ -78,7 +78,7 @@ meta_dict = {
 
 for c in category_id_list:
     url = "http://www.bjdata.gov.cn/cms/web/templateIndexList/indexList.jsp?channelID=" + c
-    print(url)
+    print url
     result = requests.get(url,headers=headers)
     soup = BeautifulSoup(result.content,features='lxml')
     #first get back the page length
@@ -87,7 +87,7 @@ for c in category_id_list:
     #iterate each pages
     for i in range(1,int(page_length)+1):
         page_url =  url + '&currPage='+str(i)
-        print(page_url)
+        print page_url
         result = requests.get(page_url,headers=headers)
         soup = BeautifulSoup(result.content,features='lxml')
         #on each page, fetch all package blocks
@@ -114,7 +114,7 @@ for c in category_id_list:
                             'trueapi':'',
             }
             package_dict['url'] = p.a['href']
-            print(package_dict['url'])
+            print package_dict['url']
             package_dict['name'] = p.a.text.strip()
             package_dict['updated'] = p.find_all("span")[1].string[:-2]
             package_dict['topics'] = category[c]
@@ -129,7 +129,7 @@ for c in category_id_list:
                     continue
             #the download count parsed from above is the url to the js script outputing the count
             #we need further parse that url
-            print(package_dict)
+            
             viewcount_url = package_dict['viewcount'].split('*')[1]
             package_dict['viewcount'] = re.compile('[0-9]+').findall(requests.get(viewcount_url).text)[0]
             #next we evaluate the trueapi
@@ -140,7 +140,7 @@ for c in category_id_list:
             #next we try to get format which is marked as img icon
             data_blocks = soup.find(attrs={'class':'zt_details_shuju fn-clear'}).\
                         find(attrs={'class':'sjdetails_boxinfo fn-clear'}).\
-                        find_all(img)
+                        find_all('img')
             format = []
             pattern=re.compile("_([a-z]+)\.")
             for d in data_blocks:
@@ -148,25 +148,34 @@ for c in category_id_list:
             package_dict['format'] = '|'.join(format)
             #next we further parse the metadata tab on the page to get tags
             meta_txt_url = "http://www.bjdata.gov.cn/cms/web/dataDetail/sjxx/"+package_dict['org']+"/"+package_dict['name']+".txt"
-            print(meta_txt_url)
+            print meta_txt_url
             result = requests.get(meta_txt_url,headers=headers)
             soup = BeautifulSoup(result.content,features='lxml')
             #iterate rows in the text to find the tags
             for item in soup.p.text.split('\r\n'):
-                key,value = item.split('\t')
-                if key.encode('utf-8') == '关键字说明'.encode('utf-8'):
-                    package_dict['tags'] = value.replace("；","|")
+                try:
+                    key,value = item.split('\t')
+                    if key.encode('utf-8') == '关键字说明'.encode('utf-8'):
+                        package_dict['tags'] = value.replace("；","|")
+                except Exception as ex:
+                    print ex
             #next we need to parse the data preview to check column num and row num
             #but first let's know whether it is necessary to do it based upon format
             if 'csv' in format or 'xls' in format:
-                preview_url = "http://www.bjdata.gov.cn"+p.find_all('iframe')[2]['src']
+                preview_url = "http://www.bjdata.gov.cn/cms/web/dataDetail/sjyl/"+package_dict['org']+"/"+package_dict['name']+"/"+package_dict['name']+".html"
+                print preview_url
                 result = requests.get(preview_url, headers=headers)
                 soup = BeautifulSoup(result.content, features='html.parser')
                 #first use re to parse the row_count from the text
                 pattern = re.compile('[0-9]')
-                package_dict['row_count'] = pattern.findall(soup.strong.string)[0]
-                #next count table columns
-                package_dict['column_count'] = str(len(soup.find(attrs={'class':'tableizer-firstrow'}).find_all('th')))
+                try:
+                    package_dict['row_count'] = pattern.findall(soup.strong.string)[0]
+                    #next count table columns
+                    package_dict['column_count'] = str(len(soup.find(attrs={'class':'tableizer-firstrow'}).find_all('th')))
+                except Exception as ex:
+                    print ex
+                    package_dict['row_count'] = 'MISSING'
+                    package_dict['column_count'] = 'MISSING'
             #output the result
             scraperwiki.sqlite.save(unique_keys=['id'],data=package_dict)
             print('****************end---'+package_dict['name']+'---end****************')
