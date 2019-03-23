@@ -142,7 +142,7 @@ for c in category_id_list:
             meta_txt_url = "http://www.bjdata.gov.cn/cms/web/dataDetail/sjxx/"+package_dict['org']+"/"+package_dict['name']+".txt"
             print meta_txt_url
             result = requests.get(meta_txt_url,headers=headers)
-            soup = BeautifulSoup(result.content,features='html.parser')
+            soup = BeautifulSoup(result.content,features='lxml')
             #iterate rows in the text to find the tags
             for item in soup.p.text.split('\r\n'):
                 try:
