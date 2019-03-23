@@ -108,7 +108,6 @@ for c in category_id_list:
             package_dict['url'] = p.a['href']
             print package_dict['url']
             package_dict['name'] = p.a.text.strip()
-            print p.find_all("span")[1].string
             package_dict['updated'] = p.span.next.next.next.next.next.string[:-2]
             package_dict['topics'] = category[c]
             result = requests.get(package_dict['url'],headers=headers)
