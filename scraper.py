@@ -82,7 +82,11 @@ for c in category_id_list:
     soup = BeautifulSoup(result.content,features='lxml')
     #first get back the page length
     #we taget the "最后页" link and parse its url to get the page length
-    page_length = soup.find("a",string='最后页')['href'].split('&')[0].split('=')[1]
+    try:
+        page_length = soup.find("a",string='最后页')['href'].split('&')[0].split('=')[1]
+    except Exception as ex:
+        print ex
+        page_length = 1
     #iterate each pages
     for i in range(1,int(page_length)+1):
         page_url =  url + '&currPage='+str(i)
