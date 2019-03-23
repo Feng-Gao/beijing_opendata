@@ -106,6 +106,8 @@ for c in category_id_list:
                             'trueapi':'',
             }
             package_dict['url'] = p.a['href']
+            print url
+            print page_url
             print package_dict['url']
             package_dict['name'] = p.a.text.strip()
             package_dict['updated'] = p.span.next.next.next.next.next.string[:-2]
