@@ -67,7 +67,7 @@ for c in category_id_list:
     url = "http://www.bjdata.gov.cn/cms/web/templateIndexList/indexList.jsp?channelID=" + c
     print url
     result = requests.get(url,headers=headers)
-    soup = BeautifulSoup(result.content,features='lxml')
+    soup = BeautifulSoup(result.content,features='html.parser')
     #first get back the page length
     #we taget the "最后页" link and parse its url to get the page length
     try:
@@ -80,7 +80,7 @@ for c in category_id_list:
         page_url =  url + '&currPage='+str(i)
         print page_url
         result = requests.get(page_url,headers=headers)
-        soup = BeautifulSoup(result.content,features='lxml')
+        soup = BeautifulSoup(result.content,features='html.parser')
         #on each page, fetch all package blocks
         package_blocks = soup.find_all(attrs={"class":"ztrit_box fn-clear"})
         print len(package_blocks)
@@ -142,7 +142,7 @@ for c in category_id_list:
             meta_txt_url = "http://www.bjdata.gov.cn/cms/web/dataDetail/sjxx/"+package_dict['org']+"/"+package_dict['name']+".txt"
             print meta_txt_url
             result = requests.get(meta_txt_url,headers=headers)
-            soup = BeautifulSoup(result.content,features='lxml')
+            soup = BeautifulSoup(result.content,features='html.parser')
             #iterate rows in the text to find the tags
             for item in soup.p.text.split('\r\n'):
                 try:
