@@ -81,10 +81,9 @@ for c in category_id_list:
         print page_url
         result = requests.get(page_url,headers=headers)
         soup = BeautifulSoup(result.content,features='html.parser')
-        print soup
         #on each page, fetch all package blocks
         package_blocks = soup.find_all(attrs={"class":"ztrit_box fn-clear"})
-        print len(package_blocks)
+        print package_blocks
         #iterate each blocks
         for p in package_blocks:
             package_dict = {'url':'',
