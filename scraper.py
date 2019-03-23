@@ -18,19 +18,7 @@ sys.setdefaultencoding('utf8')
 
 #we need random ua to bypass website security check
 ua = UserAgent()
-headers = {'User-Agent':ua.random,
-            "Host": "www.bjdata.gov.cn",
-            "Connection": "keep-alive",
-            "Cache-Control": "max-age=0",
-            "Upgrade-Insecure-Requests": "1",
-            "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8",
-            "Accept-Encoding": "gzip, deflate",
-            "Accept-Language": "zh-CN,zh;q=0.9",
-            "Cookie": "insert_cookie=57838640",
-            "If-None-Match": "cf17-582a2916bc428",
-            "If-Modified-Since": "Sun, 24 Feb 2019 12:00:19 GMT"
-}
-
+headers = {'User-Agent':ua.random}
 
 #bjdata has a weired structure. it constructs a new list url for each category based upon category's short or its id
 category_list = ["jjjs","xyfw","csjr","lyzs","jtfw","cyms",
