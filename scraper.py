@@ -1,5 +1,4 @@
-#!/usr/bin/python3
-
+# -*- coding: utf-8 -*-
 #a quick and dirty script to scrape/harvest resource-level metadata records from bjdata.gov.cn
 #the original purpose of this work is to support the ongoing international city open data index project led by SASS
 
